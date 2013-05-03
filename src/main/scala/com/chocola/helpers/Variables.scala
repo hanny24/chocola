@@ -142,8 +142,108 @@ trait Variables {
     def apply(values: Set[Int], n: Int, name: String)(implicit solver: Solver):Array[IntVarType] = {
       VariableFactory.enumeratedArray(name, n, values.toArray, solver)
     }
-  }
 
+    /**
+     * Creates a new two dimension matrix of Int variables whose domains are a range.
+     * Name is empty.
+     * @param range domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]
+     */
+    def apply(range: Range, x: Int, y: Int)(implicit solver: Solver):Array[Array[IntVarType]] = apply(range, x, y, "")
+
+    /**
+     * Creates a new two dimension matrix of Int variables whose domains are a range.
+     * @param range domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]
+     */
+    def apply(range: Range, x: Int, y: Int, name: String)(implicit solver: Solver):Array[Array[IntVarType]] = {
+      VariableFactory.boundedMatrix(name, x, y, range.min, range.max, solver)
+    }
+
+    /**
+     * Creates a new two dimension matrix of Int variables whose domains are equal to a given set.
+     * Name is empty.
+     * @param values domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]
+     */
+    def apply(values: Set[Int], x: Int, y: Int)(implicit solver: Solver):Array[Array[IntVarType]] = apply(values, x, y, "")
+
+    /**
+     * Creates a new two dimension matrix of Int variables whose domains are equal to a given set.
+     * @param values domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]
+     */
+    def apply(values: Set[Int], x: Int, y: Int, name: String)(implicit solver: Solver):Array[Array[IntVarType]] = {
+      VariableFactory.enumeratedMatrix(name, x, y, values.toArray, solver)
+    }
+
+    /**
+     * Creates a new three dimension matrix of Int variables whose domains are a range.
+     * Name is empty.
+     * @param range domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]]
+     */
+    def apply(range: Range, x: Int, y: Int, z: Int)(implicit solver: Solver):Array[Array[Array[IntVarType]]] = apply(range, x, y, z, "")
+
+    /**
+     * Creates a new three dimension matrix of Int variables whose domains are a range.
+     * @param range domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]]
+     */
+    def apply(range: Range, x: Int, y: Int, z: Int, name: String)(implicit solver: Solver):Array[Array[Array[IntVarType]]] = {
+      (1 to x).map(i => VariableFactory.boundedMatrix(s"${name}_$i", y, z, range.min, range.max, solver)).toArray
+    }
+
+    /**
+     * Creates a new three dimension matrix of Int variables whose domains are equal to a given set.
+     * Name is empty.
+     * @param values domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]]
+     */
+    def apply(values: Set[Int], x: Int, y: Int, z: Int)(implicit solver: Solver):Array[Array[Array[IntVarType]]] =
+      apply(values, x, y, z, "")
+
+      /**
+      * Creates a new three dimension matrix of Int variables whose domains are equal to a given set.
+     * @param values domain of new variables
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.IntVarType]]]]]
+     */
+      def apply(values: Set[Int], x: Int, y: Int, z: Int, name: String)(implicit solver: Solver):Array[Array[Array[IntVarType]]] = {
+        (1 to x).map(i => VariableFactory.enumeratedMatrix(s"${name}_$i", y, z, values.toArray, solver)).toArray
+      }
+  }
   /**
    * Wrapper class for Int variable.
    * @param variable instance of [[com.chocola.helpers.Variables.IntVarType]]
@@ -197,6 +297,50 @@ trait Variables {
      */
     def apply(n: Int, name: String)(implicit solver: Solver): Array[BoolVarType] = {
       VariableFactory.boolArray(name, n, solver)
+    }
+
+    /**
+     * Creates a new two dimension matrix of Bool variables. Name is empty.
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.BoolVarType]]]]
+     */
+    def apply(x: Int, y: Int)(implicit  solver: Solver): Array[Array[BoolVarType]] = apply(x, y, "")
+
+    /**
+     * Creates a new two dimension matrix of Bool variables.
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[com.chocola.helpers.Variables.BoolVarType]]]]
+     */
+    def apply(x: Int, y: Int, name: String)(implicit  solver: Solver): Array[Array[BoolVarType]] = {
+      VariableFactory.boolMatrix(name, x, y, solver)
+    }
+
+    /**
+     * Creates a new three dimension matrix of Bool variables. Name is empty.
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.BoolVarType]]]]]
+     */
+    def apply(x: Int, y: Int, z: Int)(implicit  solver: Solver): Array[Array[Array[BoolVarType]]] = apply(x, y, z, "")
+
+    /**
+     * Creates a new three dimension matrix of Bool variables.
+     * @param x size of x dimension
+     * @param y size of y dimension
+     * @param z size of z dimension
+     * @param name name of new variable
+     * @param solver Solver where the variable will be used
+     * @return instance of [[scala.Array[scala.Array[scala.Array[com.chocola.helpers.Variables.BoolVarType]]]]]
+     */
+    def apply(x: Int, y: Int, z: Int, name: String)(implicit  solver: Solver): Array[Array[Array[BoolVarType]]] = {
+      (1 to x).map(i => VariableFactory.boolMatrix(s"${name}_$i", y, z, solver)).toArray
     }
   }
 }
