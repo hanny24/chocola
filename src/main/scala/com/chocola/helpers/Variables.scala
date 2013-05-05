@@ -27,7 +27,7 @@ package com.chocola.helpers
 import solver.Solver
 import solver.variables.VariableFactory
 import VariableTypes._
-import util.objects.setDataStructures.{SetType, ISet}
+import util.objects.setDataStructures.{SetFactory, SetType, ISet}
 
 /**
  * Helpers for CP variables creation.
@@ -112,8 +112,10 @@ trait Variables{
    */
   object SetVar {
     def apply(kernel: Set[Int], envelope: Set[Int], setType: SetType, name: String)(implicit solver: Solver): SetVarType = {
-      val k = util.objects.setDataStructures.SetFactory.makeSet(setType, kernel.size)
-      val e = util.objects.setDataStructures.SetFactory.makeSet(setType, envelope.size)
+      val k = util.objects.setDataStructures.SetFactory.makeSet(setType, kernel.max - 1)
+      val e = util.objects.setDataStructures.SetFactory.makeSet(setType, envelope.max - 1)
+      kernel.foreach(k.add)
+      envelope.foreach(e.add)
       VariableFactory.set(name, e, k, solver)
     }
   }
