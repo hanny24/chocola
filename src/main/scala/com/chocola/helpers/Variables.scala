@@ -27,6 +27,7 @@ package com.chocola.helpers
 import solver.Solver
 import solver.variables.VariableFactory
 import VariableTypes._
+import util.objects.setDataStructures.{SetType, ISet}
 
 /**
  * Helpers for CP variables creation.
@@ -71,6 +72,14 @@ trait Variables{
     }
 
     /**
+     * Creates a new Int variable whose value is square of value of this.
+     * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
+     */
+    def sqr = {
+      VariableFactory.sqr(variable)
+    }
+
+    /**
      * Creates a new Int variable whose value is equal to value of this + offset.
      * @param offset variable offset
      * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
@@ -87,8 +96,6 @@ trait Variables{
     def - (offset: Int) = {
       VariableFactory.offset(variable, offset)
     }
-
-    
   }
 
   /**
@@ -97,6 +104,17 @@ trait Variables{
   object BoolVar extends BoolVarMatrix with BoolVarFactory{
     def apply(name: String)(implicit solver: Solver) : BoolVarType = {
       VariableFactory.bool(name, solver)
+    }
+  }
+
+  /**
+   * Helper object for Set variables.
+   */
+  object SetVar {
+    def apply(kernel: Set[Int], envelope: Set[Int], setType: SetType, name: String)(implicit solver: Solver): SetVarType = {
+      val k = util.objects.setDataStructures.SetFactory.makeSet(setType, kernel.size)
+      val e = util.objects.setDataStructures.SetFactory.makeSet(setType, envelope.size)
+      VariableFactory.set(name, e, k, solver)
     }
   }
 }

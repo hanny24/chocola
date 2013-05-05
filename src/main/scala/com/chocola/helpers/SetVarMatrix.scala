@@ -25,46 +25,47 @@
 package com.chocola.helpers
 
 import solver.Solver
+import util.objects.setDataStructures.SetType
 import VariableTypes._
 
 /**
  * Provides factory matrix methods for Int variable.
  */
-trait BoolVarMatrix {
-  self : BoolVarFactory =>
+trait SetVarMatrix {
+  self : SetVarFactory =>
 
   /**
-   * Creates a new matrix of Bool variables. Name is empty.
+   * Creates a new matrix of Set variables. Name is empty.
    * @param size1 size of dimension
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int)(implicit solver: Solver) : Array[BoolVarType] =
-    matrix(size1 : Int, "")
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int)(implicit solver: Solver) : Array[SetVarType] =
+    matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, "")
 
   /**
-   * Creates a new matrix of Bool variables. Name is empty.
+   * Creates a new matrix of Set variables. Name is empty.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int)(implicit solver: Solver) : Array[Array[BoolVarType]] =
-    matrix(size1 : Int, size2 : Int, "")
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int)(implicit solver: Solver) : Array[Array[SetVarType]] =
+    matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, "")
 
   /**
-   * Creates a new matrix of Bool variables. Name is empty.
+   * Creates a new matrix of Set variables. Name is empty.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int)(implicit solver: Solver) : Array[Array[Array[BoolVarType]]] =
-    matrix(size1 : Int, size2 : Int, size3 : Int, "")
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int)(implicit solver: Solver) : Array[Array[Array[SetVarType]]] =
+    matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, "")
 
   /**
-   * Creates a new matrix of Bool variables. Name is empty.
+   * Creates a new matrix of Set variables. Name is empty.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
@@ -72,11 +73,11 @@ trait BoolVarMatrix {
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int)(implicit solver: Solver) : Array[Array[Array[Array[BoolVarType]]]] =
-    matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int, "")
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int)(implicit solver: Solver) : Array[Array[Array[Array[SetVarType]]]] =
+    matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, "")
 
   /**
-   * Creates a new matrix of Bool variables. Name is empty.
+   * Creates a new matrix of Set variables. Name is empty.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
@@ -85,39 +86,39 @@ trait BoolVarMatrix {
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int)(implicit solver: Solver) : Array[Array[Array[Array[Array[BoolVarType]]]]] =
-    matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, "")
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int)(implicit solver: Solver) : Array[Array[Array[Array[Array[SetVarType]]]]] =
+    matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, "")
 
 
   /**
-   * Creates a new matrix of Bool variables.
+   * Creates a new matrix of Set variables.
    * @param size1 size of dimension
    * @param name name of new variable
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, name: String)(implicit solver: Solver) = {
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1){
-      case (x1) => apply(s"${name}_${x1}")
+      case (x1) => apply(kernel, envelope, setType, s"${name}_${x1}")
     }
   }
 
   /**
-   * Creates a new matrix of Bool variables.
+   * Creates a new matrix of Set variables.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param name name of new variable
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2){
-      case (x1, x2) => apply(s"${name}_${x1}, _${x2}")
+      case (x1, x2) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}")
     }
   }
 
   /**
-   * Creates a new matrix of Bool variables.
+   * Creates a new matrix of Set variables.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
@@ -125,14 +126,14 @@ trait BoolVarMatrix {
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3){
-      case (x1, x2, x3) => apply(s"${name}_${x1}, _${x2}, _${x3}")
+      case (x1, x2, x3) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}")
     }
   }
 
   /**
-   * Creates a new matrix of Bool variables.
+   * Creates a new matrix of Set variables.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
@@ -141,14 +142,14 @@ trait BoolVarMatrix {
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3, size4){
-      case (x1, x2, x3, x4) => apply(s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
+      case (x1, x2, x3, x4) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
     }
   }
 
   /**
-   * Creates a new matrix of Bool variables.
+   * Creates a new matrix of Set variables.
    * @param size1 size of dimension
    * @param size2 size of dimension
    * @param size3 size of dimension
@@ -158,9 +159,9 @@ trait BoolVarMatrix {
    * @param solver Solver where the variable will be used
    * @return instance of [[scala.Array]]
    */
-  def matrix(size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
+  def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3, size4, size5){
-      case (x1, x2, x3, x4, x5) => apply(s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
+      case (x1, x2, x3, x4, x5) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
     }
   }
 }

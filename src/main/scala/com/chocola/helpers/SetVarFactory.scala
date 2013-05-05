@@ -24,11 +24,32 @@
 
 package com.chocola.helpers
 
-import solver.variables.{SetVar, BoolVar, IntVar}
-import solver.variables.delta.IntDelta
+import util.objects.setDataStructures.SetType
+import solver.Solver
+import com.chocola.helpers.VariableTypes._
 
-package object VariableTypes {
-  type IntVarType = IntVar[_ <: IntDelta]
-  type BoolVarType = BoolVar[_ <: IntDelta]
-  type SetVarType = SetVar
+/**
+ * Provides factory methods for Set variables.
+ */
+trait SetVarFactory {
+  /**
+   * Creates a new Set variable. Name is empty.
+   * @param kernel kernel of a set
+   * @param envelope envelope of a set
+   * @param setType set implementation
+   * @param solver Solver where the variable will be used
+   * @return instance of [[com.chocola.helpers.VariableTypes.BoolVarType]]
+   */
+  def apply(kernel: Set[Int], envelope: Set[Int], setType: SetType)(implicit solver: Solver): SetVarType = apply(kernel, envelope, setType, "")
+
+  /**
+   * Creates a new Set variable.
+   * @param kernel kernel of a set
+   * @param envelope envelope of a set
+   * @param setType set implementation
+   * @param name name of a new variable
+   * @param solver Solver where the variable will be used
+   * @return instance of [[com.chocola.helpers.VariableTypes.BoolVarType]]
+   */
+  def apply(kernel: Set[Int], envelope: Set[Int], setType: SetType, name: String)(implicit solver: Solver): SetVarType
 }
