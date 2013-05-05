@@ -108,6 +108,21 @@ trait Variables{
   }
 
   /**
+   * Wrapper class for Bool variable.
+   * @param variable instance of [[com.chocola.helpers.VariableTypes.BoolVarType]]
+   */
+  implicit class BoolVarWrapper(val variable: BoolVarType)
+  {
+    /**
+     * Create a view over Bool variable holding the logical negation of Bool.
+     * @return instance of [[com.chocola.helpers.VariableTypes.BoolVarType]]
+     */
+    def unary_! = {
+      VariableFactory.not(variable)
+    }
+  }
+
+  /**
    * Helper object for Set variables.
    */
   object SetVar {
