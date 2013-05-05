@@ -80,7 +80,7 @@ trait Variables{
     }
 
     /**
-     * Creates a new Int variable whose value is equal to value of this + offset.
+     * Create an offset view based on Int variable and given offset.
      * @param offset variable offset
      * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
      */
@@ -89,12 +89,86 @@ trait Variables{
     }
 
     /**
-     * Creates a new Int variable whose value is equal to value of this + offset.
+     * Create an offset view based on Int variable and given offset.
      * @param offset variable offset
      * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
      */
     def - (offset: Int) = {
-      VariableFactory.offset(variable, offset)
+      VariableFactory.offset(variable, -offset)
+    }
+
+    /**
+     * Create a scale view based on Int variable and given scalar.
+     * Equal to value * variable.
+     * @param value scalar value
+     * @return
+     */
+    def *(value: Int) = {
+      VariableFactory.scale(variable, value)
+    }
+
+    /**
+     * Create a scale view based on Int variable and given scalar.
+     * Equal to variable * (1 / value).
+     * @param value divisor that will be converted to 1 / value
+     * @return
+     */
+    def /(value: Int) = {
+      VariableFactory.scale(variable, 1 / value)
+    }
+  }
+
+  /**
+   * Provides additional helpers for Int variable (commutative operations)
+   * @param value
+   */
+  implicit class IntWrapper(val value: Int)
+  {
+    /**
+     * Create an offset view based on Int variable and given offset.
+     * @param variable Int variable
+     * @return
+     */
+    def +(variable: IntVarType) = {
+      VariableFactory.offset(variable, value)
+    }
+
+    /**
+     * Create an offset view based on Int variable and given offset.
+     * @param variable Int variable
+     * @return
+     */
+    def -(variable: IntVarType) = {
+      VariableFactory.offset(-variable, value)
+    }
+
+    /**
+     * Create a scale view based on Int variable and given scalar.
+     * Equal to value * variable.
+     * @param variable Int variable to be scaled
+     * @return
+     */
+    def *(variable: IntVarType) = {
+      VariableFactory.scale(variable, value)
+    }
+
+    /**
+     * Create fixed Int variable. Name is equal to value.
+     * @param solver Solver to be used
+     * @return
+     */
+    def toIntVar(implicit solver: Solver):IntVarType = {
+      toIntVar(value.toString)
+    }
+
+    /**
+     * Create fixed Int variable.
+     * @param name name of new variable
+     * @param solver Solver to be used
+     * @return
+     */
+    def toIntVar(name: String)(implicit solver: Solver):IntVarType = {
+      VariableFactory.fixed(name, value, solver)
     }
   }
 
