@@ -106,16 +106,6 @@ trait Variables{
     def *(value: Int) = {
       VariableFactory.scale(variable, value)
     }
-
-    /**
-     * Create a scale view based on Int variable and given scalar.
-     * Equal to variable * (1 / value).
-     * @param value divisor that will be converted to 1 / value
-     * @return
-     */
-    def /(value: Int) = {
-      VariableFactory.scale(variable, 1 / value)
-    }
   }
 
   /**
