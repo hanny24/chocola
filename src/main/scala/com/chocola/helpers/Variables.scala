@@ -37,8 +37,8 @@ trait Variables{
    * Helper object for Int variables.
    */
   object IntVar extends IntVarMatrix with IntVarFactory{
-    def apply(iterable: Array[Int], name: String)(implicit solver: Solver) = {
-      VariableFactory.enumerated(name, iterable, solver)
+    def apply(iterable: Iterable[Int], name: String)(implicit solver: Solver) = {
+      VariableFactory.enumerated(name, iterable.toArray , solver)
     }
 
     def apply(max: Int, name: String)(implicit solver: Solver) = {

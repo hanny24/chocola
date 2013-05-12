@@ -38,7 +38,7 @@ trait IntVarFactory {
    * @param solver Solver where the variable will be used
    * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
    */
-  def apply(iterable: Array[Int])(implicit solver: Solver) :IntVarType =  apply(iterable, "")
+  def apply(iterable: Iterable[Int])(implicit solver: Solver) :IntVarType =  apply(iterable, "")
 
   /**
    * Creates a new Int variable whose domain
@@ -48,7 +48,7 @@ trait IntVarFactory {
    * @param solver Solver where the variable will be used
    * @return instance of [[com.chocola.helpers.VariableTypes.IntVarType]]
    */
-  def apply(iterable: Array[Int], name: String)(implicit solver: Solver) : IntVarType
+  def apply(iterable: Iterable[Int], name: String)(implicit solver: Solver) : IntVarType
 
   /**
    * Creates a new matrix of Int variables whose domains
