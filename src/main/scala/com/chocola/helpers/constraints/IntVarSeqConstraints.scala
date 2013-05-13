@@ -66,4 +66,61 @@ trait IntVarSeqConstraints {
       poster.postAllAndPush(IntConstraintFactory.element(value, array, index, 0))
     }
   }
+
+  /**
+   * Defines consistencies supported by Choco implementation.
+   */
+  object AllDifferentConsistency extends Enumeration {
+    type AllDifferentConsistency = Value
+    val Bounds = Value
+    val Arc = Value
+
+    def toShortName(consistency: AllDifferentConsistency) =
+      if (consistency == Bounds)
+        "BC"
+      else
+        "AC"
+  }
+
+  /**
+   * Post All different (distinct) constraint. Arc consistency is used.
+   * @param seq
+   * @param poster
+   * @return
+   */
+  def alldifferent(seq: Seq[IntVarType])(implicit poster: ConstraintPoster) {
+    alldifferent(seq.toArray, AllDifferentConsistency.Arc)
+  }
+
+  /**
+   * Post All different (distinct) constraint. Arc consistency is used.
+   * @param array
+   * @param poster
+   * @return
+   */
+  def alldifferent(array: Array[IntVarType])(implicit poster: ConstraintPoster) {
+    alldifferent(array, AllDifferentConsistency.Arc)
+  }
+
+  /**
+   * Post All different (distinct) constraint.
+   * @param seq
+   * @param consistency
+   * @param poster
+   * @return
+   */
+  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency)(implicit poster: ConstraintPoster) {
+    alldifferent(seq.toArray, consistency)
+  }
+
+  /**
+   * Post All different (distinct) constraint.
+   * @param array
+   * @param consistency
+   * @param poster
+   * @return
+   */
+  def alldifferent(array: Array[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency)(implicit poster: ConstraintPoster) {
+    poster.postAllAndPush(IntConstraintFactory.alldifferent(array, AllDifferentConsistency.toShortName(consistency)))
+  }
 }
