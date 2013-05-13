@@ -24,32 +24,43 @@
 
 package com.chocola
 
-import org.scalatest.FunSpec
+import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
-import com.chocola.ChocoHelpers._
-import solver.variables.fast.{BitsetIntVarImpl, IntervalIntVarImpl}
+import ChocoHelpers._
+import solver.constraints.binary.Element
 
-class IntVarTest extends FunSpec with ShouldMatchers{
-  implicit val solver = Solver("IntVarTest")
-  describe("An IntVar") {
-    it("should create bounded domain using Int argument") {
-      val a = IntVar(42, "bounded42")
-      a.getClass should be (classOf[IntervalIntVarImpl])
+class IntVarElementTest extends FlatSpec with ShouldMatchers{
+  "An element constraint" should "produce single constraint with no additional variable" in {
+    val _ = new CPProblem {
+
+    val array = IntVar.matrix(0 to 10, 10)
+    val index = IntVar(2 to 7)
+    val value = IntVar(7 -> 9)
+
+    subjectsTo {
+      array(index) === value
     }
 
-    it("should create bounded domain using bounds argument") {
-      val a = IntVar(24 -> 42, "bounded24->42")
-      a.getClass should be (classOf[IntervalIntVarImpl])
+    solver.getNbCstrs should equal (1)
+    solver.getNbVars should equal (array.length + 2)
+    solver.getCstrs()(0).getClass should be (classOf[Element])
+    }
+  }
+
+  it should "support Seq collections" in {
+    val _ = new CPProblem {
+    val a = IntVar(0 -> 10)
+    val b = IntVar(0 -> 10)
+    val c = IntVar(0 -> 10)
+    val d = IntVar(0 -> 10)
+
+    subjectsTo {
+      List(a,b)(c) === d
     }
 
-    it("should create enumerated domain using iterable argument") {
-      val a = IntVar(0 to 42, "enumerated42")
-      a.getClass should be (classOf[BitsetIntVarImpl])
-    }
-
-    it("should use Array as iterable argument") {
-      val a = IntVar((0 to 42).toArray, "array")
-      a.getClass should be (classOf[BitsetIntVarImpl])
+    solver.getNbCstrs should equal (1)
+    solver.getNbVars should equal (4)
+    solver.getCstrs()(0).getClass should be (classOf[Element])
     }
   }
 }

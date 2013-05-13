@@ -7,6 +7,8 @@ name := "chocola"
 version := "0.01-prealpha"
 
 scalaVersion := "2.10.0"
+ 
+scalacOptions += "-feature"
 
 resolvers += "choco.repos" at "http://www.emn.fr/z-info/choco-repo/mvn/repository/"
 

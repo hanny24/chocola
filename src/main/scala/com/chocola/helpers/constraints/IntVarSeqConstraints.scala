@@ -22,26 +22,48 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.helpers.constraints
 
-import scala.language.implicitConversions
-import com.chocola.helpers.Variables
-import solver.Solver
-import com.chocola.helpers.constraints.IntVarSeqConstraints
+import com.chocola.helpers.VariableTypes._
+import solver.constraints.IntConstraintFactory
+import com.chocola.ConstraintPoster
+
 /**
- * Provides all-in-one helpers import.
+ * Contains implicit conversion for arrays and Seqs of IntVar.
  */
-package object ChocoHelpers extends Variables with IntVarSeqConstraints{
+trait IntVarSeqConstraints {
+  implicit class IntVarSeqWrapper(val seq: Seq[IntVarType]) {
+    /**
+     * Stands for Array[IntVar](IntVar)
+     * @param index
+     * @return
+     */
+    def apply(index: IntVarType) = new IntVarElementWrapper(seq.toArray, index)
+  }
+
+  implicit class IntVarArrayWrapper(val array: Array[IntVarType]) {
+    /**
+     * Stands for Seq[IntVar](IntVar)
+     * @param index
+     * @return
+     */
+    def apply(index: IntVarType) = new IntVarElementWrapper(array, index)
+  }
 
   /**
-   * Helper for Solver.
+   * Used to post element and element-related constraints.
+   * @param array
+   * @param index
    */
-  object Solver {
+  class IntVarElementWrapper(array: Array[IntVarType], index: IntVarType) {
     /**
-     * Creates new Solver.
-     * @param problem name of solver
-     * @return instance of [[solver.Solver]]
+     * Posts array(index) == value
+     * @param value
+     * @param poster
+     * @return
      */
-    def apply(problem: String) = new Solver(problem)
+    def ===(value: IntVarType)(implicit poster: ConstraintPoster) = {
+      poster.postAllAndPush(IntConstraintFactory.element(value, array, index, 0))
+    }
   }
 }

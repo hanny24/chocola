@@ -27,7 +27,7 @@ package com.chocola.helpers
 import solver.Solver
 import solver.variables.VariableFactory
 import VariableTypes._
-import util.objects.setDataStructures.{SetFactory, SetType, ISet}
+import util.objects.setDataStructures.SetType
 
 /**
  * Helpers for CP variables creation.
