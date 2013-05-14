@@ -83,44 +83,13 @@ trait IntVarSeqConstraints {
   }
 
   /**
-   * Post All different (distinct) constraint. Arc consistency is used.
-   * @param seq
-   * @param poster
-   * @return
-   */
-  def alldifferent(seq: Seq[IntVarType])(implicit poster: ConstraintPoster) {
-    alldifferent(seq.toArray, AllDifferentConsistency.Arc)
-  }
-
-  /**
-   * Post All different (distinct) constraint. Arc consistency is used.
-   * @param array
-   * @param poster
-   * @return
-   */
-  def alldifferent(array: Array[IntVarType])(implicit poster: ConstraintPoster) {
-    alldifferent(array, AllDifferentConsistency.Arc)
-  }
-
-  /**
    * Post All different (distinct) constraint.
    * @param seq
    * @param consistency
    * @param poster
    * @return
    */
-  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency)(implicit poster: ConstraintPoster) {
-    alldifferent(seq.toArray, consistency)
-  }
-
-  /**
-   * Post All different (distinct) constraint.
-   * @param array
-   * @param consistency
-   * @param poster
-   * @return
-   */
-  def alldifferent(array: Array[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency)(implicit poster: ConstraintPoster) {
-    poster.postAllAndPush(IntConstraintFactory.alldifferent(array, AllDifferentConsistency.toShortName(consistency)))
+  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency = AllDifferentConsistency.Arc)(implicit poster: ConstraintPoster) {
+    poster.postAllAndPush(IntConstraintFactory.alldifferent(seq.toArray, AllDifferentConsistency.toShortName(consistency)))
   }
 }
