@@ -23,7 +23,7 @@
  */
 
 package com.chocola.helpers.constraints
-
+import scala.language.existentials
 import com.chocola.helpers.VariableTypes._
 import solver.constraints.IntConstraintFactory
 import com.chocola.ConstraintPoster
@@ -63,7 +63,7 @@ trait IntVarSeqConstraints {
      * @return
      */
     def ===(value: IntVarType)(implicit poster: ConstraintPoster) = {
-      poster.postAllAndPush(IntConstraintFactory.element(value, array, index, 0))
+      poster += IntConstraintFactory.element(value, array, index, 0)
     }
   }
 
@@ -89,7 +89,7 @@ trait IntVarSeqConstraints {
    * @param poster
    * @return
    */
-  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency = AllDifferentConsistency.Arc)(implicit poster: ConstraintPoster) {
-    poster.postAllAndPush(IntConstraintFactory.alldifferent(seq.toArray, AllDifferentConsistency.toShortName(consistency)))
+  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency = AllDifferentConsistency.Arc)(implicit poster: ConstraintPoster) = {
+    poster += IntConstraintFactory.alldifferent(seq.toArray, AllDifferentConsistency.toShortName(consistency))
   }
 }

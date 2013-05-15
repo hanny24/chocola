@@ -24,27 +24,24 @@
 
 package com.chocola
 
-import scala.language.implicitConversions
-import com.chocola.helpers.Variables
-import solver.Solver
-import com.chocola.helpers.constraints.{IntVarArithConstraints, BoolVarConstraints, IntVarSeqConstraints}
-/**
- * Provides all-in-one helpers import.
- */
-package object ChocoHelpers extends Variables with ConstrainTypeDef
-                                              with IntVarArithConstraints
-                                              with BoolVarConstraints
-                                              with IntVarSeqConstraints{
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.ShouldMatchers
+import ChocoHelpers._
 
-  /**
-   * Helper for Solver.
-   */
-  object Solver {
-    /**
-     * Creates new Solver.
-     * @param problem name of solver
-     * @return instance of [[solver.Solver]]
-     */
-    def apply(problem: String) = new Solver(problem)
+class CPProblemTest extends FlatSpec with ShouldMatchers{
+  "A constraint" should "be assignable to val" in {
+    val _ = new CPProblem {
+      val bool = BoolVar()
+      val a = IntVar(1->3)
+      val b = IntVar(1->3)
+
+      subjectsTo {
+        val tmp: ConstraintType = a =/= b
+        val cons: ConstraintType = a < b
+        bool ==> cons
+      }
+
+      solver.getNbCstrs should equal (2)
+    }
   }
 }

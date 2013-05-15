@@ -31,61 +31,51 @@ import solver.variables.Variable
 import solver.variables.delta.IDelta
 import solver.constraints.propagators.Propagator
 
+trait ConstrainTypeDef {
+  type ConstraintType = Constraint[T, U] forSome {type T <: Variable[_ <:IDelta]; type U <: Propagator[T]}
+}
+
 /**
  * Data types of constraints
  */
-package object ConstraintTypes{
-  type ConstraintType = Constraint[T, U] forSome {type T <: Variable[_ <:IDelta]; type U <: Propagator[T]}
-  type StackType = collection.mutable.ArrayStack[ConstraintType]
+package object ConstraintTypes extends ConstrainTypeDef{
 }
 
 import ConstraintTypes._
 
 /**
- * Trait that is used for delayed constraint posting.
+  * Trait that is used for delayed constraint posting.
  * It basically acts as a stack.
  */
 trait ConstraintPoster {
+  def += (constraint: ConstraintType) : ConstraintType
 
-  def push(constraint: ConstraintType): Unit
+  def -= (constraint: ConstraintType) : Unit
 
-  def pop(): ConstraintType
-
-  def isEmpty:Boolean
-
-  def postAllAndClear() : Unit
-
-  def postAllAndPush(constraint: ConstraintType) {
-    postAllAndClear()
-    push(constraint)
-  }
 }
 
 /**
- * General Constraint programming problem. Includes Solver,
+  * General Constraint programming problem. Includes Solver,
  * some syntactical sugar and some implicit values needed.
  */
 trait CPProblem {
-
   implicit val solver = new Solver()
-
-  private val constraintsStack = new StackType()
 
   /**
    * Implementation of ConstraintPoster
    */
   implicit object Poster extends ConstraintPoster {
-    def push(constraint: ConstraintType) {
-      constraintsStack.push(constraint)
+    type SetType = collection.mutable.HashSet[ConstraintType]
+    import ConstraintTypes._
+    val constraints = new SetType()
+
+    def += (constraint: ConstraintType) = {
+      constraints += constraint
+      constraint
     }
 
-    def pop(): ConstraintType = constraintsStack.pop()
-
-    def isEmpty: Boolean = constraintsStack.isEmpty
-
-    def postAllAndClear() {
-      constraintsStack.foreach(solver.post(_))
-      constraintsStack.clear()
+    def -= (constraint: ConstraintType) {
+      constraints -= constraint
     }
   }
 
@@ -96,7 +86,8 @@ trait CPProblem {
    */
   def subjectsTo(body: => Unit) = {
     body
-    Poster.postAllAndClear()
+    Poster.constraints.foreach(solver.post(_))
+    Poster.constraints.clear()
   }
 }
 
