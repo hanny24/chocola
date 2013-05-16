@@ -30,6 +30,7 @@ import solver.constraints.Constraint
 import solver.variables.Variable
 import solver.variables.delta.IDelta
 import solver.constraints.propagators.Propagator
+import com.chocola.helpers.constraints.{RegularConstraint, ChocolaConstraint}
 
 trait ConstrainTypeDef {
   type ConstraintType = Constraint[T, U] forSome {type T <: Variable[_ <:IDelta]; type U <: Propagator[T]}
@@ -42,15 +43,23 @@ package object ConstraintTypes extends ConstrainTypeDef{
 }
 
 import ConstraintTypes._
-
 /**
   * Trait that is used for delayed constraint posting.
  * It basically acts as a stack.
  */
 trait ConstraintPoster {
-  def += (constraint: ConstraintType) : ConstraintType
+  def += (constraint: ConstraintType) : ChocolaConstraint
+
+  def += [T <: ChocolaConstraint](constraint: T):T = {
+    this += constraint.constraint
+    constraint
+  }
 
   def -= (constraint: ConstraintType) : Unit
+
+  def -= (constraint: ChocolaConstraint) {
+    this -= constraint.constraint
+  }
 
 }
 
@@ -66,12 +75,11 @@ trait CPProblem {
    */
   implicit object Poster extends ConstraintPoster {
     type SetType = collection.mutable.HashSet[ConstraintType]
-    import ConstraintTypes._
     val constraints = new SetType()
 
     def += (constraint: ConstraintType) = {
       constraints += constraint
-      constraint
+      RegularConstraint(constraint)
     }
 
     def -= (constraint: ConstraintType) {

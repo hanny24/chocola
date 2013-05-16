@@ -22,26 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.helpers.constraints
 
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
-import ChocoHelpers._
+import scala.language.existentials
+import com.chocola.ConstraintTypes
 
-class CPProblemTest extends FlatSpec with ShouldMatchers{
-  "A constraint" should "be assignable to val" in {
-    val _ = new CPProblem {
-      val bool = BoolVar()
-      val a = IntVar(1->3)
-      val b = IntVar(1->3)
-
-      subjectsTo {
-        val tmp = a =/= b
-        val cons = a < b
-        bool ==> cons
-      }
-
-      solver.getNbCstrs should equal (2)
-    }
-  }
+import ConstraintTypes._
+sealed abstract class ChocolaConstraint {
+  val constraint: ConstraintType
 }
+
+case class RegularConstraint(constraint: ConstraintType) extends ChocolaConstraint
+
+case class InversibleConstraint(constraint: ConstraintType, not: ConstraintType)  extends ChocolaConstraint
