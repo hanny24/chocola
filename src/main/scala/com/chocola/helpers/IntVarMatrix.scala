@@ -128,7 +128,7 @@ trait IntVarMatrix {
   def matrix(iterable: Iterable[Int], size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
     val array = iterable.toArray
     Array.tabulate(size1, size2){
-        case (x1, x2) => apply(array, s"${name}_${x1}, _${x2}")
+        case (x1, x2) => apply(array, s"${name}_${x1}_${x2}")
     }
   }
   
@@ -146,7 +146,7 @@ trait IntVarMatrix {
   def matrix(iterable: Iterable[Int], size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
     val array = iterable.toArray
     Array.tabulate(size1, size2, size3){
-        case (x1, x2, x3) => apply(array, s"${name}_${x1}, _${x2}, _${x3}")
+        case (x1, x2, x3) => apply(array, s"${name}_${x1}_${x2}_${x3}")
     }
   }
   
@@ -165,7 +165,7 @@ trait IntVarMatrix {
   def matrix(iterable: Iterable[Int], size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
     val array = iterable.toArray
     Array.tabulate(size1, size2, size3, size4){
-        case (x1, x2, x3, x4) => apply(array, s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
+        case (x1, x2, x3, x4) => apply(array, s"${name}_${x1}_${x2}_${x3}_${x4}")
     }
   }
   
@@ -185,7 +185,7 @@ trait IntVarMatrix {
   def matrix(iterable: Iterable[Int], size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
     val array = iterable.toArray
     Array.tabulate(size1, size2, size3, size4, size5){
-        case (x1, x2, x3, x4, x5) => apply(array, s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
+        case (x1, x2, x3, x4, x5) => apply(array, s"${name}_${x1}_${x2}_${x3}_${x4}_${x5}")
     }
   }
 
@@ -281,7 +281,7 @@ trait IntVarMatrix {
     */
     def matrix(max: Int, size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2){
-          case (x1, x2) => apply(max, s"${name}_${x1}, _${x2}")
+          case (x1, x2) => apply(max, s"${name}_${x1}_${x2}")
       }
     }
     
@@ -298,7 +298,7 @@ trait IntVarMatrix {
     */
     def matrix(max: Int, size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3){
-          case (x1, x2, x3) => apply(max, s"${name}_${x1}, _${x2}, _${x3}")
+          case (x1, x2, x3) => apply(max, s"${name}_${x1}_${x2}_${x3}")
       }
     }
     
@@ -316,7 +316,7 @@ trait IntVarMatrix {
     */
     def matrix(max: Int, size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3, size4){
-          case (x1, x2, x3, x4) => apply(max, s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
+          case (x1, x2, x3, x4) => apply(max, s"${name}_${x1}_${x2}_${x3}_${x4}")
       }
     }
     
@@ -335,7 +335,7 @@ trait IntVarMatrix {
     */
     def matrix(max: Int, size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3, size4, size5){
-          case (x1, x2, x3, x4, x5) => apply(max, s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
+          case (x1, x2, x3, x4, x5) => apply(max, s"${name}_${x1}_${x2}_${x3}_${x4}_${x5}")
       }
     }
 
@@ -431,7 +431,7 @@ trait IntVarMatrix {
     */
     def matrix(bounds: (Int, Int), size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2){
-          case (x1, x2) => apply(bounds, s"${name}_${x1}, _${x2}")
+          case (x1, x2) => apply(bounds, s"${name}_${x1}_${x2}")
       }
     }
     
@@ -448,7 +448,7 @@ trait IntVarMatrix {
     */
     def matrix(bounds: (Int, Int), size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3){
-          case (x1, x2, x3) => apply(bounds, s"${name}_${x1}, _${x2}, _${x3}")
+          case (x1, x2, x3) => apply(bounds, s"${name}_${x1}_${x2}_${x3}")
       }
     }
     
@@ -466,7 +466,7 @@ trait IntVarMatrix {
     */
     def matrix(bounds: (Int, Int), size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3, size4){
-          case (x1, x2, x3, x4) => apply(bounds, s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
+          case (x1, x2, x3, x4) => apply(bounds, s"${name}_${x1}_${x2}_${x3}_${x4}")
       }
     }
     
@@ -485,7 +485,7 @@ trait IntVarMatrix {
     */
     def matrix(bounds: (Int, Int), size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
       Array.tabulate(size1, size2, size3, size4, size5){
-          case (x1, x2, x3, x4, x5) => apply(bounds, s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
+          case (x1, x2, x3, x4, x5) => apply(bounds, s"${name}_${x1}_${x2}_${x3}_${x4}_${x5}")
       }
     }
 }

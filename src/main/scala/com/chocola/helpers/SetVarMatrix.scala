@@ -113,7 +113,7 @@ trait SetVarMatrix {
    */
   def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2){
-      case (x1, x2) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}")
+      case (x1, x2) => apply(kernel, envelope, setType, s"${name}_${x1}_${x2}")
     }
   }
 
@@ -128,7 +128,7 @@ trait SetVarMatrix {
    */
   def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3){
-      case (x1, x2, x3) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}")
+      case (x1, x2, x3) => apply(kernel, envelope, setType, s"${name}_${x1}_${x2}_${x3}")
     }
   }
 
@@ -144,7 +144,7 @@ trait SetVarMatrix {
    */
   def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3, size4){
-      case (x1, x2, x3, x4) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}, _${x4}")
+      case (x1, x2, x3, x4) => apply(kernel, envelope, setType, s"${name}_${x1}_${x2}_${x3}_${x4}")
     }
   }
 
@@ -161,7 +161,7 @@ trait SetVarMatrix {
    */
   def matrix(kernel: Set[Int], envelope: Set[Int], setType: SetType, size1 : Int, size2 : Int, size3 : Int, size4 : Int, size5 : Int, name: String)(implicit solver: Solver) = {
     Array.tabulate(size1, size2, size3, size4, size5){
-      case (x1, x2, x3, x4, x5) => apply(kernel, envelope, setType, s"${name}_${x1}, _${x2}, _${x3}, _${x4}, _${x5}")
+      case (x1, x2, x3, x4, x5) => apply(kernel, envelope, setType, s"${name}_${x1}_${x2}_${x3}_${x4}_${x5}")
     }
   }
 }
