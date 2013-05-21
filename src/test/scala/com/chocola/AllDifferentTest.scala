@@ -31,6 +31,7 @@ import ChocoHelpers._
 class AllDifferentTest extends FlatSpec with ShouldMatchers{
   "An alldifferent" should "support Seq collection" in {
     val _ = new CPProblem {
+      val name = ""
       val a = IntVar(1 -> 4)
       val b = IntVar(1 -> 4)
       val c = IntVar(1 -> 4)
@@ -43,6 +44,7 @@ class AllDifferentTest extends FlatSpec with ShouldMatchers{
 
   it should "support array" in {
     val _ = new CPProblem {
+      val name = ""
       val array = IntVar.matrix(1 -> 4, 42)
       subjectsTo {
         alldifferent(array)

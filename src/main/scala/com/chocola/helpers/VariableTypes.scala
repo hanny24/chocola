@@ -27,8 +27,13 @@ package com.chocola.helpers
 import solver.variables.{SetVar, BoolVar, IntVar}
 import solver.variables.delta.IntDelta
 
-package object VariableTypes {
+trait VariableTypesDef {
   type IntVarType = IntVar[_ <: IntDelta]
   type BoolVarType = BoolVar[_ <: IntDelta]
   type SetVarType = SetVar
+}
+
+
+package object VariableTypes extends VariableTypesDef{
+
 }

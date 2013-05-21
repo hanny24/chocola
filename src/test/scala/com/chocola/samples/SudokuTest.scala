@@ -22,27 +22,52 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.samples
 
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
-import ChocoHelpers._
 
-class CPProblemTest extends FlatSpec with ShouldMatchers{
-  "A constraint" should "be assignable to val" in {
-    val _ = new CPProblem {
-      val name = ""
-      val bool = BoolVar()
-      val a = IntVar(1->3)
-      val b = IntVar(1->3)
+class SudokuTest extends FlatSpec with ShouldMatchers{
+  "SudokuTest sample" should "be solved" in {
+    val matrixHints = List(
+      "...3.2...",
+      ".5.798.3.",
+      "..7...8..",
+      "..86.73..",
+      ".7.....6.",
+      "..35.41..",
+      "..5...6..",
+      ".2.419.5.",
+      "...8.6...").map(_.map {
+      case '.' => 0
+      case a => a - '0'
+    })
 
-      subjectsTo {
-        val tmp = a =/= b
-        val cons = a < b
-        bool ==> cons
-      }
+    val hints = for {
+      (row, x) <- matrixHints.zipWithIndex
+      (value,y) <- row.zipWithIndex
+      if value != 0
+    } yield ((x,y),value)
 
-      solver.getNbCstrs should equal (2)
+    val sudoku = new Sudoku(hints)
+    sudoku.findSolution()
+
+    val result = sudoku.fields.map { r =>
+      r.map(_.getValue).toList
     }
+
+    val expected = List(
+      List(6,8,9,3,4,2,5,1,7),
+      List(1,5,2,7,9,8,4,3,6),
+      List(3,4,7,1,6,5,8,9,2),
+      List(9,1,8,6,2,7,3,4,5),
+      List(5,7,4,9,3,1,2,6,8),
+      List(2,6,3,5,8,4,1,7,9),
+      List(4,9,5,2,7,3,6,8,1),
+      List(8,2,6,4,1,9,7,5,3),
+      List(7,3,1,8,5,6,9,2,4)
+    )
+
+    result.toList should equal(expected)
   }
 }

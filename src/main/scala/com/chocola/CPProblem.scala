@@ -31,6 +31,8 @@ import solver.variables.Variable
 import solver.variables.delta.IDelta
 import solver.constraints.propagators.Propagator
 import com.chocola.helpers.constraints.{RegularConstraint, ChocolaConstraint}
+import solver.search.strategy.IntStrategyFactory
+import com.chocola.helpers.VariableTypes
 
 trait ConstrainTypeDef {
   type ConstraintType = Constraint[T, U] forSome {type T <: Variable[_ <:IDelta]; type U <: Propagator[T]}
@@ -43,6 +45,7 @@ package object ConstraintTypes extends ConstrainTypeDef{
 }
 
 import ConstraintTypes._
+import VariableTypes._
 /**
   * Trait that is used for delayed constraint posting.
  * It basically acts as a stack.
@@ -68,7 +71,9 @@ trait ConstraintPoster {
  * some syntactical sugar and some implicit values needed.
  */
 trait CPProblem {
-  implicit val solver = new Solver()
+  val name: String
+
+  implicit val solver = new Solver(name)
 
   /**
    * Implementation of ConstraintPoster
@@ -96,6 +101,22 @@ trait CPProblem {
     body
     Poster.constraints.foreach(solver.post(_))
     Poster.constraints.clear()
+  }
+
+  def branchFirstFailDomainMin(vars: Seq[IntVarType]) {
+    branchFirstFailDomainMin(vars.toArray)
+  }
+
+  def branchFirstFailDomainMin(vars: Array[IntVarType]) {
+    solver.set(IntStrategyFactory.firstFail_InDomainMin(vars))
+  }
+
+  def findSolution() = {
+    solver.findSolution()
+  }
+
+  def findAllSolutions() = {
+    solver.findAllSolutions()
   }
 }
 

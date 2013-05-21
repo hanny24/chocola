@@ -32,7 +32,7 @@ import solver.constraints.binary.Element
 class IntVarElementTest extends FlatSpec with ShouldMatchers{
   "An element constraint" should "produce single constraint with no additional variable" in {
     val _ = new CPProblem {
-
+    val name = ""
     val array = IntVar.matrix(0 to 10, 10)
     val index = IntVar(2 to 7)
     val value = IntVar(7 -> 9)
@@ -49,18 +49,19 @@ class IntVarElementTest extends FlatSpec with ShouldMatchers{
 
   it should "support Seq collections" in {
     val _ = new CPProblem {
-    val a = IntVar(0 -> 10)
-    val b = IntVar(0 -> 10)
-    val c = IntVar(0 -> 10)
-    val d = IntVar(0 -> 10)
+      val name = ""
+      val a = IntVar(0 -> 10)
+      val b = IntVar(0 -> 10)
+      val c = IntVar(0 -> 10)
+      val d = IntVar(0 -> 10)
 
-    subjectsTo {
-      List(a,b)(c) === d
-    }
+      subjectsTo {
+        List(a,b)(c) === d
+      }
 
-    solver.getNbCstrs should equal (1)
-    solver.getNbVars should equal (4)
-    solver.getCstrs()(0).getClass should be (classOf[Element])
-    }
+      solver.getNbCstrs should equal (1)
+      solver.getNbVars should equal (4)
+      solver.getCstrs()(0).getClass should be (classOf[Element])
+      }
   }
 }

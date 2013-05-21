@@ -22,27 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.util
 
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
-import ChocoHelpers._
+import scala.language.implicitConversions
+import scala.reflect.ClassTag
 
-class CPProblemTest extends FlatSpec with ShouldMatchers{
-  "A constraint" should "be assignable to val" in {
-    val _ = new CPProblem {
-      val name = ""
-      val bool = BoolVar()
-      val a = IntVar(1->3)
-      val b = IntVar(1->3)
+class MatrixView[T](array: Seq[Seq[T]]) {
+  def row(i: Int) = array(i)
 
-      subjectsTo {
-        val tmp = a =/= b
-        val cons = a < b
-        bool ==> cons
-      }
+  def column(j: Int) = {
+    (0 until array.length map (array(_)(j)))
+  }
 
-      solver.getNbCstrs should equal (2)
+  def submatrix(topleft: (Int, Int), height: Int, width: Int) = {
+    (topleft._1 until topleft._1 + height).map { i =>
+      array(i).drop(topleft._2).take(width)
     }
   }
+}
+
+trait MatrixViewConversions {
+  implicit def toMatrixView[T](seq: Seq[Seq[T]]) = new MatrixView(seq)
+
+  implicit def arrayToMatrixView[T](seq: Array[Array[T]])(implicit tag: ClassTag[T]) = new MatrixView(seq.map(_.toSeq).toSeq)
 }

@@ -22,27 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.samples
 
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
-import ChocoHelpers._
+import com.chocola.ChocoHelpers._
+import com.chocola.CPProblem
 
-class CPProblemTest extends FlatSpec with ShouldMatchers{
-  "A constraint" should "be assignable to val" in {
-    val _ = new CPProblem {
-      val name = ""
-      val bool = BoolVar()
-      val a = IntVar(1->3)
-      val b = IntVar(1->3)
+class Sudoku(hints: Seq[((Int, Int), Int)]) extends CPProblem {
+  // define name of a problem
+  val name = "Sudoku"
 
-      subjectsTo {
-        val tmp = a =/= b
-        val cons = a < b
-        bool ==> cons
-      }
+  // create int variables
+  val fields = IntVar.matrix(1 to 9, 9, 9, "fields")
 
-      solver.getNbCstrs should equal (2)
+  subjectsTo {
+    // post all hints
+    hints.foreach {
+      case ((x,y), value) => fields(x)(y) === value
     }
+
+    // post alldifferent for all rows
+    0 until 9 foreach (r => alldifferent(fields.row(r)))
+
+    // post alldifferent for all columns
+    0 until 9 foreach (c => alldifferent(fields.column(c)))
+
+    // post alldifferent for all 3x3 blocks
+    val blocks = for {
+        x <- 0 until 9 by 3
+        y <- 0 until 9 by 3
+    } yield fields.submatrix((x,y),3,3).flatten
+    blocks.foreach(alldifferent(_))
   }
+
+  branchFirstFailDomainMin(fields.flatten)
 }

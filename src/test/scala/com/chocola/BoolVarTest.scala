@@ -31,6 +31,7 @@ import ChocoHelpers._
 class BoolVarTest extends FlatSpec with ShouldMatchers{
   "A BoolVar" should "support implication" in {
     val _ = new CPProblem {
+      val name = ""
       val bool = BoolVar()
       val a = IntVar(1->3)
       val b = IntVar(4->9)
@@ -45,6 +46,7 @@ class BoolVarTest extends FlatSpec with ShouldMatchers{
 
   it should "support nested implication" in {
     val _ = new CPProblem {
+      val name = ""
       val bool = BoolVar()
       val bool2 = BoolVar()
       val a = IntVar(1->3)
@@ -60,6 +62,7 @@ class BoolVarTest extends FlatSpec with ShouldMatchers{
 
   it should "support <==> operator for binary relations" in {
     val _ = new CPProblem {
+      val name = ""
       val bool = BoolVar()
 
       val a = IntVar(1->3)

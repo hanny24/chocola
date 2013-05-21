@@ -25,16 +25,21 @@
 package com.chocola
 
 import scala.language.implicitConversions
-import com.chocola.helpers.Variables
+import com.chocola.helpers.{VariableTypesDef, Variables}
 import solver.Solver
 import com.chocola.helpers.constraints.{IntVarArithConstraints, BoolVarConstraints, IntVarSeqConstraints}
+import com.chocola.util.MatrixViewConversions
+
 /**
  * Provides all-in-one helpers import.
  */
 package object ChocoHelpers extends Variables with ConstrainTypeDef
+                                              with VariableTypesDef
                                               with IntVarArithConstraints
                                               with BoolVarConstraints
-                                              with IntVarSeqConstraints{
+                                              with IntVarSeqConstraints
+                                              with MatrixViewConversions
+{
 
   /**
    * Helper for Solver.
