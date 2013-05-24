@@ -41,6 +41,25 @@ trait BoolVarConstraints {
     }
 
     /**
+     * Assigns boolean value to Boolean variable.
+     * @param value
+     * @param poster
+     * @return
+     */
+    def ===(value: Boolean)(implicit poster: ConstraintPoster) = {
+      val ivalue = if (value) 1 else 0
+      poster += IntConstraintFactory.arithm(variable,"=",ivalue)
+    }
+
+    /**
+     * Assigns boolean value to Boolean variable.
+     * @param value
+     * @param poster
+     * @return
+     */
+    def =/=(value: Boolean)(implicit poster: ConstraintPoster) = this.===(!value)
+
+    /**
      * Syntactical support for implies constraint
      * @param cons
      * @param poster
@@ -60,10 +79,19 @@ trait BoolVarConstraints {
     def <==> (cons: InversibleConstraint)(implicit poster: ConstraintPoster) = {
       poster -= cons
       val a = IntConstraintFactory.implies(variable, cons.constraint)
-      val b = IntConstraintFactory.implies(!variable, cons.not)
+      val b = IntConstraintFactory.implies(!variable, cons.not())
       poster += a
       poster += b
       (a, b)
+    }
+
+    /**
+     * Alternate syntax support for linear expressions.
+     * @param that
+     * @return
+     */
+    def ||(that: BoolVarType) = {
+      LinearExpr(List(LinearExprElement(variable,1), LinearExprElement(that,1)))
     }
   }
 }

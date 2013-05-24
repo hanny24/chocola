@@ -34,13 +34,17 @@ import com.chocola.ChocoHelpers._
 case class LinearExprElement(variable: IntVarType, coef: Int)
 
 case class LinearExpr(elements: Seq[LinearExprElement]) extends ComparisonOperators{
-  type TypeOfConstraint = RegularConstraint
+  type TypeOfConstraint = InversibleConstraint
 
   def +(variable: IntVarType) = {
     LinearExpr(LinearExprElement(variable,1) +: elements)
   }
 
   def -(variable: IntVarType) = {
+    LinearExpr(LinearExprElement(variable,1) +: elements)
+  }
+
+  def ||(variable: BoolVarType) = {
     LinearExpr(LinearExprElement(variable,1) +: elements)
   }
 
@@ -61,42 +65,51 @@ case class LinearExpr(elements: Seq[LinearExprElement]) extends ComparisonOperat
     val possibleMax = (variables zip coeficients).toList.foldLeft(0){
       case (acc,(v,c)) => acc + v.getUB * c
     }
-    val newvariable = op match {
-      case "=" => other
-      case "!=" => {
-        val n = VariableFactory.bounded("",possibleMin, possibleMax, solver)
-        // post
-        n =/= other
-        n
-      }
-      case "<" => {
-        val n = VariableFactory.bounded("",possibleMin, other.getUB - 1, solver)
-        // post
-        n < other
-        n
-      }
-      case "<=" => {
-        val n = VariableFactory.bounded("",possibleMin, other.getUB, solver)
-        // post
-        n <= other
-        n
-      }
-      case ">" => {
-        val n = VariableFactory.bounded("",other.getLB + 1, possibleMax, solver)
-        // post
-        n > other
-        n
-      }
-      case ">=" => {
-        val n = VariableFactory.bounded("",other.getLB, possibleMax, solver)
-        // post
-        n >= other
-        n
-      }
-    }
+
+    val newvariable = createAdditionalVariable(other,op,possibleMin,possibleMax)
 
     val c = IntConstraintFactory.scalar(variables, coeficients,newvariable)
     poster += c
-    RegularConstraint(c)
+    InversibleConstraint(c, () => {
+      val notnewvariable = createAdditionalVariable(other,notop,possibleMin,possibleMax)
+      IntConstraintFactory.scalar(variables, coeficients,notnewvariable)
+    })
+  }
+
+  private def createAdditionalVariable(variable: IntVarType, op: String, possibleMin: Int, possibleMax: Int)
+                                      (implicit poster: ConstraintPoster,solver: Solver) = {
+    op match {
+      case "=" => variable
+      case "!=" => {
+        val n = VariableFactory.bounded("",possibleMin, possibleMax, solver)
+        // post
+        n =/= variable
+        n
+      }
+      case "<" => {
+        val n = VariableFactory.bounded("",possibleMin, variable.getUB - 1, solver)
+        // post
+        n < variable
+        n
+      }
+      case "<=" => {
+        val n = VariableFactory.bounded("",possibleMin, variable.getUB, solver)
+        // post
+        n <= variable
+        n
+      }
+      case ">" => {
+        val n = VariableFactory.bounded("",variable.getLB + 1, possibleMax, solver)
+        // post
+        n > variable
+        n
+      }
+      case ">=" => {
+        val n = VariableFactory.bounded("",variable.getLB, possibleMax, solver)
+        // post
+        n >= variable
+        n
+      }
+    }
   }
 }

@@ -22,16 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.chocola.helpers.constraints
+package com.chocola.constraints
 
-import scala.language.existentials
-import com.chocola.ConstraintTypes
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.ShouldMatchers
+import com.chocola.CPProblem
+import com.chocola.ChocoHelpers._
 
-import ConstraintTypes._
-sealed abstract class ChocolaConstraint {
-  val constraint: ConstraintType
+
+class LinearExprEqTest extends FlatSpec with ShouldMatchers{
+  "LinearExpr" should "support <==> operator" in {
+    val problem = new CPProblem {
+      val name: String = "Linearexp bool var test"
+
+      val a = BoolVar("a")
+      val b = BoolVar("b")
+      val c = BoolVar("c")
+      val xor = BoolVar("xor")
+
+      subjectsTo{
+        xor <==> ((a || b || c) === 1)
+        xor === true
+      }
+
+      branchFirstFailDomainMin(Array(a,b,c,xor))
+    }
+
+    problem.solver.getNbCstrs should equal(4)
+
+    problem.findAllSolutions() should equal(3)
+  }
 }
-
-case class RegularConstraint(constraint: ConstraintType) extends ChocolaConstraint
-
-case class InversibleConstraint(constraint: ConstraintType, not: () => ConstraintType)  extends ChocolaConstraint

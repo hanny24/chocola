@@ -42,16 +42,18 @@ trait IntVarArithConstraints {
                                          (implicit poster: ConstraintPoster, solver: Solver) = {
       val cons = IntConstraintFactory.arithm(variable, op, other)
       poster += cons
-      val consnot = IntConstraintFactory.arithm(variable, notop, other)
-      InversibleConstraint(cons, consnot)
+      InversibleConstraint(cons, () => {
+        IntConstraintFactory.arithm(variable, notop, other)
+      })
     }
 
     override def postUnderlyingConstraint(other: IntVarType, op: String, notop: String)
                                          (implicit poster: ConstraintPoster, solver: Solver) = {
       val cons = IntConstraintFactory.arithm(variable, op, other)
       poster += cons
-      val consnot = IntConstraintFactory.arithm(variable, notop, other)
-      InversibleConstraint(cons, consnot)
+      InversibleConstraint(cons, () => {
+        IntConstraintFactory.arithm(variable, notop, other)
+      })
     }
   }
 }
