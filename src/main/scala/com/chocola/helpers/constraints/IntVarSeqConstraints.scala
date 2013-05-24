@@ -83,13 +83,15 @@ trait IntVarSeqConstraints {
   }
 
   /**
-   * Post All different (distinct) constraint.
+   * Post Alldifferent (distinct) constraint. Default is Arc consistency.
    * @param seq
    * @param consistency
    * @param poster
    * @return
    */
-  def alldifferent(seq: Seq[IntVarType], consistency: AllDifferentConsistency.AllDifferentConsistency = AllDifferentConsistency.Arc)(implicit poster: ConstraintPoster) = {
+  def alldifferent(seq: Seq[IntVarType],
+                   consistency: AllDifferentConsistency.AllDifferentConsistency = AllDifferentConsistency.Arc)
+                  (implicit poster: ConstraintPoster) = {
     poster += IntConstraintFactory.alldifferent(seq.toArray, AllDifferentConsistency.toShortName(consistency))
   }
 }

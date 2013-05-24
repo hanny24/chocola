@@ -28,6 +28,7 @@ import solver.Solver
 import solver.variables.VariableFactory
 import VariableTypes._
 import util.objects.setDataStructures.SetType
+import com.chocola.helpers.constraints.{LinearExprElement, LinearExpr}
 
 /**
  * Helpers for CP variables creation.
@@ -105,6 +106,24 @@ trait Variables{
      */
     def *(value: Int) = {
       VariableFactory.scale(variable, value)
+    }
+
+    /**
+     * Creates new linear expression.
+     * @param that
+     * @return
+     */
+    def +(that: IntVarType):LinearExpr = {
+      LinearExpr(List(LinearExprElement(variable,1), LinearExprElement(that,1)))
+    }
+
+    /**
+     * Creates new linear expression.
+     * @param that
+     * @return
+     */
+    def -(that: IntVarType):LinearExpr = {
+      LinearExpr(List(LinearExprElement(variable,1), LinearExprElement(that,-1)))
     }
   }
 

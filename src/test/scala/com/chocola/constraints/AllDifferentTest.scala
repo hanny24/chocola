@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.chocola
+package com.chocola.constraints
 
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
-import ChocoHelpers._
+import com.chocola.CPProblem
+import com.chocola.ChocoHelpers._
 
 class AllDifferentTest extends FlatSpec with ShouldMatchers{
   "An alldifferent" should "support Seq collection" in {

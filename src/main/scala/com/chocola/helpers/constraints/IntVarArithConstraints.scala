@@ -28,57 +28,26 @@ import scala.language.existentials
 import com.chocola.helpers.VariableTypes._
 import com.chocola.ConstraintPoster
 import solver.constraints.IntConstraintFactory
+import solver.Solver
 
 /**
  * Provides arithmetic constraints helpers
  */
 trait IntVarArithConstraints {
-  implicit class IntVarArithmWrapper(val variable: IntVarType)
+  implicit class IntVarArithmWrapper(val variable: IntVarType) extends ComparisonOperators
   {
-    def === (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, "=", "!=")
+    type TypeOfConstraint = InversibleConstraint
 
-    def =/= (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, "!=", "=")
-
-    def < (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, "<", ">=")
-
-    def > (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, ">", "<=")
-
-    def <= (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, "<=", ">")
-
-    def >= (other: Int)(implicit poster: ConstraintPoster) =
-      postArithmConst(other, "=", "!=")
-
-    def === (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, "=","!=")
-
-    def =/= (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, "!=","=")
-
-    def < (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, "<", ">=")
-
-    def > (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, ">", "<=")
-
-    def <= (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, "<=", ">")
-
-    def >= (other: IntVarType)(implicit poster: ConstraintPoster) =
-      postArithm(other, "=", "!=")
-
-    private def postArithmConst(other: Int, op: String, notop: String)(implicit poster: ConstraintPoster) = {
+    override def postUnderlyingConstraint(other: Int, op: String, notop: String)
+                                         (implicit poster: ConstraintPoster, solver: Solver) = {
       val cons = IntConstraintFactory.arithm(variable, op, other)
       poster += cons
       val consnot = IntConstraintFactory.arithm(variable, notop, other)
       InversibleConstraint(cons, consnot)
     }
 
-    private def postArithm(other: IntVarType, op: String, notop: String)(implicit poster: ConstraintPoster) = {
+    override def postUnderlyingConstraint(other: IntVarType, op: String, notop: String)
+                                         (implicit poster: ConstraintPoster, solver: Solver) = {
       val cons = IntConstraintFactory.arithm(variable, op, other)
       poster += cons
       val consnot = IntConstraintFactory.arithm(variable, notop, other)

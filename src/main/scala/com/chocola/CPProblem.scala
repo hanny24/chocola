@@ -112,7 +112,12 @@ trait CPProblem {
   }
 
   def findSolution() = {
-    solver.findSolution()
+    if (solver.getMeasures.getSolutionCount == 0) {
+      solver.findSolution()
+    }
+    else{
+      solver.nextSolution()
+    }
   }
 
   def findAllSolutions() = {
